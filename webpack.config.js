@@ -1,27 +1,118 @@
+const webpack = require('webpack')
+const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
+
+const NODE_ENV = process.env.NODE_ENV || 'development'
+const HOST = 'http://localhost'
+const PORT = '8080'
+
+const getEntry = prod =>
+  prod
+    ? './src/index.js'
+    : [`webpack-dev-server/client?${HOST}:${PORT}`, './src/index.js']
+
+const getOutput = prod =>
+  prod
+    ? {
+        path: 'dist',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[name].[chunkhash].js',
+      }
+    : {
+        path: './dist',
+        filename: 'index.js',
+        chunkFilename: '[name].js',
+      }
+
+const getPlugins = prod =>
+  prod
+    ? [
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false,
+            drop_debugger: true,
+            drop_console: true,
+          },
+          output: {
+            comments: false,
+          },
+          sourceMap: false,
+        }),
+        new CompressionPlugin({
+          asset: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: /\.js$/,
+          threshold: 0,
+          minRatio: 0.9,
+        }),
+        new ChunkManifestPlugin({
+          filename: 'chunk-manifest.json',
+          manifestVariable: 'webpackManifest',
+        }),
+        new ManifestPlugin({
+          fileName: 'file-manifest.json',
+          basePath: '',
+        }),
+      ]
+    : []
+
+const isProd = NODE_ENV === 'production'
+
 module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: './dist',
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].js',
+  entry: {
+    index: getEntry(isProd),
   },
+
+  output: {
+    path: getOutput(isProd),
+  },
+
+  plugins: getPlugins(isProd),
+
+  module: {
+    noParse: /\.elm$/,
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: [/node_modules/],
+        use: {
+          loader: 'babel-loader?presets=latest',
+        },
+      },
+      {
+        test: /\.elm$/,
+        exclude: [/elm-stuff/, /node_modules/],
+        use: [
+          {
+            loader: 'elm-assets-loader?module=Assets&tagger=AssetPath',
+          },
+          {
+            loader: 'elm-webpack-loader',
+          },
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file',
+        query: {
+          name: '[name].[hash].[ext]',
+        },
+      },
+    ],
+  },
+
   resolve: {
     extensions: ['.js', '.elm'],
   },
-  module: {
-    noParse: /\.elm$/,
-    rules: [{
-      test: /\.js/,
-      exclude: [/node_modules/],
-      use: {
-        loader: 'babel-loader',
-      }
-    },{
-      test: /\.elm$/,
-      exclude: [/elm-stuff/, /node_modules/],
-      use: {
-        loader: 'elm-webpack-loader',
-      }
-    }]
+
+  devServer: {
+    publicPath: `${HOST}:${PORT}/build/`,
+    port: PORT,
+    compress: true,
+    stats: 'minimal',
+    historyApiFallback: {
+      rewrites: [{ from: /./, to: '/src/index.html' }],
+    },
   },
-};
+}
