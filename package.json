@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "format": "prettier --write \"src/**/*.js\" && eslint \"src/**/*.js\" --fix",
-    "restage": "git add $(git diff --name-only --cached)",
+    "restage": "git update-index --again",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "pre-commit": [
