@@ -1,0 +1,21 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "spread" : true,
+    "restParams" : true
+  },
+  "globals": {
+    "localStorage": true,
+    "window": true
+  },
+  "rules": {
+    "semi": ["error", "never"]
+  }
+}
