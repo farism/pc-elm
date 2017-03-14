@@ -70,7 +70,7 @@ module.exports = {
   plugins: getPlugins(isProd),
 
   module: {
-    noParse: /\.elm$/,
+    // noParse: /\.elm$/,
     rules: [
       {
         test: /\.js$/,
@@ -93,7 +93,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loader: 'file',
+        loader: 'file-loader',
         query: {
           name: '[name].[hash].[ext]',
         },
@@ -107,7 +107,6 @@ module.exports = {
 
   devServer: {
     publicPath: `${HOST}:${PORT}/build/`,
-    // contentBase: `/build/`,
     port: PORT,
     compress: true,
     stats: 'minimal',
