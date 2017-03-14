@@ -9,8 +9,10 @@ const PORT = '8080'
 
 const getEntry = prod =>
   prod
-    ? './src/index.js'
-    : [`webpack-dev-server/client?${HOST}:${PORT}`, './src/index.js']
+    ? { index: './src/index.js' }
+    : {
+        index: [`webpack-dev-server/client?${HOST}:${PORT}`, './src/index.js'],
+      }
 
 const getOutput = prod =>
   prod
@@ -20,8 +22,9 @@ const getOutput = prod =>
         chunkFilename: '[name].[chunkhash].js',
       }
     : {
-        path: './dist',
-        filename: 'index.js',
+        path: '/build',
+        publicPath: `/build/`,
+        filename: '[name].js',
         chunkFilename: '[name].js',
       }
 
@@ -60,13 +63,9 @@ const getPlugins = prod =>
 const isProd = NODE_ENV === 'production'
 
 module.exports = {
-  entry: {
-    index: getEntry(isProd),
-  },
+  entry: getEntry(isProd),
 
-  output: {
-    path: getOutput(isProd),
-  },
+  output: getOutput(isProd),
 
   plugins: getPlugins(isProd),
 
@@ -77,7 +76,7 @@ module.exports = {
         test: /\.js$/,
         exclude: [/node_modules/],
         use: {
-          loader: 'babel-loader?presets=latest',
+          loader: 'babel-loader?presets=latest&plugins=syntax-dynamic-import',
         },
       },
       {
@@ -108,6 +107,7 @@ module.exports = {
 
   devServer: {
     publicPath: `${HOST}:${PORT}/build/`,
+    // contentBase: `/build/`,
     port: PORT,
     compress: true,
     stats: 'minimal',

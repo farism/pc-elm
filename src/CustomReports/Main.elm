@@ -1,8 +1,9 @@
 module Main exposing (..)
 
-import Html exposing (text)
+import Html exposing (..)
+import Html.Attributes as Attr
 
 
 main : Html.Html a
 main =
-    text "hello world"
+    img [] []

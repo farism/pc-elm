@@ -1,20 +1,16 @@
 {
-  "parserOptions": {
-    "sourceType": "module",
-  },
   "env": {
     "node": true,
     "es6": true
-  },
-  "ecmaFeatures": {
-    "modules": true,
-    "spread" : true,
-    "restParams" : true
   },
   "globals": {
     "localStorage": true,
     "window": true
   },
+  "parser": "babel-eslint",
+  "plugins": [
+    "babel"
+  ],
   "rules": {
     "semi": ["error", "never"]
   }
