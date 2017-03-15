@@ -1,10 +1,10 @@
 module Sandbox.CustomReports exposing (..)
 
 import Html exposing (..)
-import CustomReports.Main as CR
+import CustomReports.Main as CustomReports
 
 
-flags : CR.Flags
+flags : CustomReports.Flags
 flags =
     { companyId = "2675"
     , csrf = ""
@@ -14,11 +14,11 @@ flags =
     }
 
 
-main : Program Never CR.Model CR.Msg
+main : Program Never CustomReports.Model CustomReports.Msg
 main =
     Html.program
-        { init = CR.init flags
-        , view = CR.view
-        , update = CR.update
-        , subscriptions = CR.subscriptions
+        { init = CustomReports.init flags
+        , view = CustomReports.view
+        , update = CustomReports.update
+        , subscriptions = CustomReports.subscriptions
         }
