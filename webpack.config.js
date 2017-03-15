@@ -87,7 +87,7 @@ module.exports = {
             loader: 'elm-assets-loader?module=Assets&tagger=AssetPath',
           },
           {
-            loader: 'elm-webpack-loader',
+            loader: 'elm-webpack-loader?cwd=.',
           },
         ],
       },

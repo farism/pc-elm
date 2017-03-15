@@ -10,7 +10,3 @@ url asset =
     case asset of
         AssetPath url ->
             url
-
-
-header =
-    AssetPath "./header.png"

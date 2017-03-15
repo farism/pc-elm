@@ -6,18 +6,18 @@
   "scripts": {
     "build": "npm run clean && NODE_ENV=production webpack",
     "clean": "rm -rf dist/",
-    "dev": "NODE_ENV=development webpack-dev-server",
+    "dev": "NODE_ENV=development webpack-dev-server --watch",
     "elm-format": "elm-format src/ --yes",
     "eslint": "eslint \"{webpack.config.js,src/**/*.js}\" --fix",
     "format": "npm run elm-format && npm run prettier && npm run eslint",
     "prettier": "prettier --single-quote --trailing-comma es5 --write \"{webpack.config.js,src/**/*.js}\"",
-    "restage": "git update-index --again",
+    "readd": "git update-index --again",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "pre-commit": [
     "test",
     "format",
-    "restage"
+    "readd"
   ],
   "author": "",
   "license": "ISC",
