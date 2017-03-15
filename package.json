@@ -4,20 +4,22 @@
   "description": "A frontend client for Procore",
   "main": "index.js",
   "scripts": {
+    "add-again": "git update-index --again",
+    "browser": "opn http://localhost:8000/src/Sandbox",
     "build": "npm run clean && NODE_ENV=production webpack",
-    "clean": "rm -rf dist/",
-    "dev": "opn http://localhost:8000 && elm-reactor",
+    "clean": "rimraf dist/",
+    "dev": "npm run browser && elm-reactor",
     "elm-format": "elm-format src/ --yes",
     "eslint": "eslint \"{webpack.config.js,src/**/*.js}\" --fix",
     "format": "npm run elm-format && npm run prettier && npm run eslint",
     "prettier": "prettier --single-quote --trailing-comma es5 --write \"{webpack.config.js,src/**/*.js}\"",
-    "readd": "git update-index --again",
+    "serve": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "pre-commit": [
     "test",
     "format",
-    "readd"
+    "add-again"
   ],
   "author": "",
   "license": "ISC",
@@ -44,6 +46,7 @@
     "pre-commit": "^1.2.2",
     "prettier": "^0.22.0",
     "prettier-eslint": "^4.2.1",
+    "rimraf": "^2.6.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1",
     "webpack-manifest-plugin": "^1.1.0"

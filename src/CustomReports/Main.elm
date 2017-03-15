@@ -6,6 +6,7 @@ import Http
 import CustomReports.Api as Api
 import CustomReports.Types exposing (..)
 import Ui.Dropdown as Dropdown
+import Assets
 
 
 type alias Flags =
@@ -86,7 +87,7 @@ update msg model =
 
 handleApiMsg : Api.Msg -> Model -> ( Model, Cmd Msg )
 handleApiMsg msg model =
-    case msg of
+    case msg |> Debug.log "msg" of
         Api.FetchedDefinitions (Ok definitions) ->
             ( { model | definitions = definitions }, Cmd.none )
 
@@ -144,7 +145,7 @@ view model =
     case model.report of
         Just report ->
             div []
-                [ img [ Attr.src "/header.png" ] []
+                [ img [ Assets.src (Assets.AssetPath "../assets/header.png") ] []
                 , div [ Attr.class "tool-header" ]
                     [ h1 [] [ text report.name ]
                     , tabs report.tabs

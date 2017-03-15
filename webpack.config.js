@@ -110,8 +110,5 @@ module.exports = {
     port: PORT,
     compress: true,
     stats: 'minimal',
-    historyApiFallback: {
-      rewrites: [{ from: /./, to: '/src/index.html' }],
-    },
   },
 }

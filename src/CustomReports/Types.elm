@@ -7,7 +7,7 @@ type alias Report =
     , isSharedWithProvider : Bool
     , name : String
     , tabs : List ReportTab
-    , users : List Int
+    , users : List ContactCompact
     }
 
 
@@ -174,7 +174,14 @@ type alias Contact =
     , groupIds : List Int
     , lastName : String
     , id : Int
-    , vendor : String
+    , vendor : Maybe String
+    }
+
+
+type alias ContactCompact =
+    { id : Int
+    , login : String
+    , name : String
     }
 
 

@@ -23,7 +23,7 @@ decodeReport =
         |> required "is_shared_with_provider" JD.bool
         |> required "name" JD.string
         |> required "report_tabs_attributes" (JD.list decodeReportTab)
-        |> required "users" (JD.list JD.int)
+        |> required "users" (JD.list decodeContactCompact)
 
 
 encodeReport : Maybe Report -> JE.Value
@@ -35,7 +35,7 @@ encodeReport report =
                 , ( "is_shared_with_provider", JE.bool re.isSharedWithProvider )
                 , ( "name", JE.string re.name )
                   -- , ( "report_tabs_attributes", JE.int re.id )
-                , ( "users", encodeList JE.int re.users )
+                , ( "users", encodeList encodeContactCompact re.users )
                 ]
 
         Nothing ->
@@ -384,7 +384,7 @@ decodeContact =
         |> required "group_ids" (JD.list JD.int)
         |> required "last_name" JD.string
         |> required "user_id" JD.int
-        |> required "vendor_name" JD.string
+        |> required "vendor_name" (JD.nullable JD.string)
 
 
 encodeContact : Contact -> JE.Value
@@ -394,7 +394,24 @@ encodeContact c =
         , ( "group_ids", encodeList JE.int c.groupIds )
         , ( "last_name", JE.string c.lastName )
         , ( "user_id", JE.int c.id )
-        , ( "vendor_name", JE.string c.vendor )
+        , ( "vendor_name", encodeMaybe JE.string c.vendor )
+        ]
+
+
+decodeContactCompact : JD.Decoder ContactCompact
+decodeContactCompact =
+    decode ContactCompact
+        |> required "id" JD.int
+        |> required "login" JD.string
+        |> required "name" JD.string
+
+
+encodeContactCompact : ContactCompact -> JE.Value
+encodeContactCompact c =
+    JE.object
+        [ ( "id", JE.int c.id )
+        , ( "login", JE.string c.login )
+        , ( "name", JE.string c.name )
         ]
 
 
